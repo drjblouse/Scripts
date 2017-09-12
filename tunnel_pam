@@ -1,0 +1,15 @@
+#!/bin/bash
+
+ENVIRON=$1
+SERVER=$2
+
+output=$(python ~/Scripts/grab_ips.py ${ENVIRON} ${SERVER} 2>&1)
+
+for ARG in ${output}
+do
+    echo ${ARG}
+    PORT=$(unused_port)
+    IP=${ARG}
+    ssh ubuntu@bastion.${ENVIRON} -i ~/.ssh/${ENVIRON}.pem -p 22 -NMS ~/.ssh/${PORT} -f -C -L ${PORT}:${IP}:443
+    echo https://localhost:${PORT}
+done

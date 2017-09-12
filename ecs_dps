@@ -1,0 +1,7 @@
+#!/bin/bash
+
+ENVIRON=$1
+
+output=$(python ~/Scripts/grab_ips.py ${ENVIRON} ECS 2>&1)
+
+exec dps_ssh ~/.ssh/${ENVIRON}.pem bastion.${ENVIRON} ec2-user ${output}
